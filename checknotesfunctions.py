@@ -67,13 +67,39 @@ def flaggedWords(ws, my_list, results_list):
                 note = ''
                 for l in foundWords:
                     left,sep,right = d.value.lower().partition(l)
-                    note = note + left[-70:] + sep.upper() + right[:70] + ';'
+                    note = note + "..." + left[-70:] + sep.upper() + right[:70] + "..." + ';'
                 forCSV = ','.join(foundWords).upper()
                 this_list = [forCSV, e.value, h.value, i.value, f.value, note, g.value, j.value, k.value]
                 results_list.append(this_list)
+    return            
+                #self.csvWritee(forCSV, e, h, i, f, note, g, j, k)
+def flaggedWordsInverse(ws, my_list, results_list):
+    '''Finds keywords in row of data, throws in list'''
+    for row in ws.iter_rows(row_offset=1):
+        d = row[0] # The note
+        e = row[1] # The name of the individual
+        f = row[2] # Contact date
+        g = row[3] # Program
+        h = row[4] # Start time
+        i = row[5] # end time
+        j = row[6] # duration
+        k = row[7] # Note writer
+        foundWords = []
+        if d.value:
+            for w in sorted(my_list):
+                if w not in str(d.value).lower():
+                    foundWords.append(w)
+            if len(foundWords) > 0:
+                note = ''
+                for l in foundWords:
+                    left,sep,right = d.value.lower().partition(l)
+                    note = note + left[-70:] + sep.upper() + right[:70] + ';'
+                forCSV = ','.join(foundWords).upper()
+                this_list = ['Missing ' + forCSV, e.value, h.value, i.value, f.value, note, g.value, j.value, k.value]
+                results_list.append(this_list)
                 
                 #self.csvWritee(forCSV, e, h, i, f, note, g, j, k)
-
+    return
 def oddDuration(ws, greaterthan, lessthan, results_list):
     for row in ws.iter_rows(row_offset=1):
         d = row[0] # The note
@@ -97,23 +123,24 @@ def oddDuration(ws, greaterthan, lessthan, results_list):
                 this_list = ['No Duration', e.value, h.value, i.value, f.value, d.value, g.value, j.value, k.value]
                 results_list.append(this_list)
                 #self.csvWritee('NO DURATION', e, h, i, f, d.value, g, j, k)
-
+    return
 def shortNote(ws, notelength, results_list):
-        for row in ws.iter_rows(row_offset=1):
-            d = row[0] # The note
-            e = row[1] # The name of the individual
-            f = row[2] # Contact date
-            g = row[3] # Program
-            h = row[4] # Start time
-            i = row[5] # end time
-            j = row[6] # duration
-            k = row[7] # Note writer
-            if d.value:
-                if len(d.value) < notelength:
-                    this_list = ['SHORT NOTE (<' + str(notelength) + ')', e.value, h.value, i.value, f.value, d.value, g.value, j.value, k.value]
-                    results_list.append(this_list)
-                    #self.csvWritee('SHORT NOTE (< ' + str(notelength) + ')', e, h, i, f, d.value, g, j, k)
 
+    for row in ws.iter_rows(row_offset=1):
+        d = row[0] # The note
+        e = row[1] # The name of the individual
+        f = row[2] # Contact date
+        g = row[3] # Program
+        h = row[4] # Start time
+        i = row[5] # end time
+        j = row[6] # duration
+        k = row[7] # Note writer
+        if d.value:
+            if len(d.value) < notelength:
+                this_list = ['SHORT NOTE (<' + str(notelength) + ')', e.value, h.value, i.value, f.value, d.value, g.value, j.value, k.value]
+                results_list.append(this_list)
+                #self.csvWritee('SHORT NOTE (< ' + str(notelength) + ')', e, h, i, f, d.value, g, j, k)
+    return
 def oddTimes(ws, startTimeAfter, startTimeBefore, results_list):
 
     after = convert24(startTimeAfter)
@@ -147,6 +174,7 @@ def oddTimes(ws, startTimeAfter, startTimeBefore, results_list):
                 this_list = ['12AM/Error', e.value, h.value, i.value, f.value, d, g.value, j.value, k.value]
                 results_list.append(this_list)
                 #self.csvWritee("12AM/Error", e, h, i, f, d, g, j, k)
+    return
 def underUnits(ws, underUnits, results_list):
     units = int(underUnits) * 15
     from collections import defaultdict

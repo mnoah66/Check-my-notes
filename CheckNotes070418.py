@@ -19,7 +19,11 @@ class SampleApp(tk.Tk):
 
         self.title("Check My Notes")
 
+        #------------------------------------------------------------
+        #------------------------------------------------------------
         # -------------------- MAIN GUI -----------------------------
+        #------------------------------------------------------------
+        #------------------------------------------------------------
 
         self.labelKeywords = tk.Label(self, text="FLAG THE FOLLOWING WORDS (Separate with comma)",font=Font(family='Arial', size=11))
         self.labelKeywords.pack(fill=tk.X,padx=50,pady=5)
@@ -189,18 +193,18 @@ class SampleApp(tk.Tk):
         self.spinUnderUnits.pack(padx=5,pady=2)
  
         ## Choose file to read
-        self.buttonFile = tk.Button(self, text="1. Choose File to be scanned", command=self.file_choose)
+        self.buttonFile = tk.Button(self, text="1. Choose File to be scanned", command=self.file_choose, fg='blue')
         self.buttonFile.pack(fill=tk.X,padx=50,pady=2)
         self.labelFile = tk.Label(self, text="")
         self.labelFile.pack() 
 
         # Choose direcgtory to save file ot
-        self.buttonFileOutput = tk.Button(self, text="2. Confirm output file location", command=self.folder_choose)
+        self.buttonFileOutput = tk.Button(self, text="2. Confirm output file location", command=self.folder_choose, fg='blue')
         self.buttonFileOutput.pack(fill=tk.X,padx=50,pady=2)
         self.labelFileOutput = tk.Entry(self, text="",background='grey94')
         self.labelFileOutput.pack(fill=tk.X,padx=50,pady=2) 
         
-        self.button = tk.Button(self, text="3. RUN", command=self.on_button)
+        self.button = tk.Button(self, text="3. RUN", command=self.on_button, fg='blue')
         self.button.pack(fill=tk.X,padx=50,pady=2) 
         
 
@@ -224,8 +228,11 @@ class SampleApp(tk.Tk):
         self.spinUnderUnits.insert(0,config.get('DEFAULT','spinUnderUnits'))
         self.labelFileOutput.insert(0,config.get('DEFAULT','labelFileOutput'))
         
-        
-    #-------------------------  END - MAIN GUI ---------------------------------------------------
+        #------------------------------------------------------------
+        #------------------------------------------------------------
+        # -------------------- END MAIN GUI -------------------------
+        #------------------------------------------------------------
+        #------------------------------------------------------------
 
     def folder_choose(self):
         global dirname
@@ -336,7 +343,7 @@ class SampleApp(tk.Tk):
             webbrowser.open_new(r"file://" + os.path.abspath(str(excel_file_name)))
             self.link.configure(text="")
         
-        self.link = tk.Label(self, text="Click here for file", fg="blue", cursor="hand2")
+        self.link = tk.Label(self, text="Click here for file", fg="brown", cursor="hand2")
         self.link.pack()
         self.link.bind("<Button-1>", callback)
     def saveConfig(self):
