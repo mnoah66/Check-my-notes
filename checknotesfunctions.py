@@ -1,5 +1,6 @@
 from datetime import timedelta, date, time
 import datetime
+import pandas
 
 def convert24(str1):
         # Checking if last two elements of time
@@ -71,7 +72,8 @@ def flaggedWords(ws, my_list, results_list):
                 forCSV = ','.join(foundWords).upper()
                 this_list = [forCSV, e.value, h.value, i.value, f.value, note, g.value, j.value, k.value]
                 results_list.append(this_list)
-    return            
+
+    return results_list           
                 #self.csvWritee(forCSV, e, h, i, f, note, g, j, k)
 def flaggedWordsInverse(ws, my_list, results_list):
     '''Finds keywords in row of data, throws in list'''
@@ -176,6 +178,7 @@ def oddTimes(ws, startTimeAfter, startTimeBefore, results_list):
                 #self.csvWritee("12AM/Error", e, h, i, f, d, g, j, k)
     return
 def underUnits(ws, underUnits, results_list):
+
     units = int(underUnits) * 15
     from collections import defaultdict
     names = defaultdict(int)
@@ -197,6 +200,33 @@ def underUnits(ws, underUnits, results_list):
         if names[k] < units:
             this_list = ['UNDER UNITS (' +str(underUnits) + ')', k, str(int(v)/15), '', '','', '', '', '', '']
             results_list.append(this_list)
+
+def overlap(list_item, key, k, results_list):
+    intervals = list_item
+    overlapping = [ [s,e] for s in intervals for e in intervals if s is not e and s[1]>e[0] and s[0]<e[0] ]
+    duplicate = [ [s,e] for s in intervals for e in intervals if s is not e and s[0]==e[0] ]
+    unique_duplicate = [list(x) for x in set(tuple(x) for x in duplicate)]
+    for x in overlapping:
+        results_list.append(["{0} has overlapping notes on {1}".format(key, k),'', '','', '', '', '', '','',''])
+    for y in unique_duplicate:
+        results_list.append(["{0} has duplicated start times on {1}".format(key, k),'', '','', '', '', '', '','',''])
+
+def overlapping_notes(ws, results_list):
+    from collections import defaultdict
+    people = defaultdict(dict)
+    for row in ws.iter_rows(row_offset=1):
+      p=row[1]
+      l=row[2]
+      s=row[4]
+      e=row[5]
+      if p.value:
+        if p.value not in people:
+            people[p.value] = defaultdict(list)
+        people[p.value][l.value].append((s.value, e.value))
+    for key, val in people.items():
+        for k, v in val.items():
+          overlap(v, key, k, results_list)
+
 '''
 def under7forResidential(self):
         example_dictionary = defaultdict(list)
